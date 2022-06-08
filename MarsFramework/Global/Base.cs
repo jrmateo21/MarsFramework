@@ -17,6 +17,7 @@ namespace MarsFramework.Global
         public static String ExcelPath = MarsResource.ExcelPath;
         public static String TestDataExcelPath = MarsResource.TestDataExcelPath;
         public static String TestDataShareSkillExcelPath = MarsResource.TestDataShareSkillExcelPath;
+        public static String TestDataManageListingsExcelPath = MarsResource.TestDataManageListingsExcelPath;
         public static string ScreenshotPath = MarsResource.ScreenShotPath;
         public static string ReportPath = MarsResource.ReportPath;
         public static String FileUploadPath = MarsResource.FileUploadPath;
@@ -77,10 +78,10 @@ namespace MarsFramework.Global
            //end test. (Reports)
            // extent.EndTest(test);
             // calling Flush writes everything to the log file (Reports)
-          //  extent.Flush();
+            extent.Flush();
             // Close the driver :)            
-            //GlobalDefinitions.driver.Close();
-           // GlobalDefinitions.driver.Quit();
+            GlobalDefinitions.driver.Close();
+            GlobalDefinitions.driver.Quit();
         }
         #endregion
 

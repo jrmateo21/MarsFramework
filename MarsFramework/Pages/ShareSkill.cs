@@ -296,25 +296,23 @@ namespace MarsFramework.Pages
             if (skillTradeOption == "Credit")
             {
                 SkillTradeOptionCred.Click();
-                CreditAmount.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "SkillTrade"));
+                CreditAmount.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Credit"));
                 Console.WriteLine("Skill Trade: " + skillTradeOption);
             }
             else
             {
                 SkillTradeOptionSE.Click();
-                SkillExchange.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "SkillTrade"));
+                SkillExchange.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Skill-Exchange"));
                 SkillExchange.SendKeys(Keys.Enter);
                 Console.WriteLine("Skill Trade: " + skillTradeOption);
             }
 
-            //Work Samples
-            
-                UploadSamplesButton.Click();
-                //UploadSamplesButton.SendKeys(Base.FileUploadPath);
-
-
-
-
+            //Work Samples    
+            Thread.Sleep(1000);
+            IWebElement uploadFile = GlobalDefinitions.driver.FindElement(By.XPath("//*[@id='selectFile'][@type='file']"));
+            uploadFile.SendKeys(Base.FileUploadPath);
+            Console.WriteLine("File to Upload: " + Base.FileUploadPath);
+              
 
 
             //Active
@@ -343,11 +341,9 @@ namespace MarsFramework.Pages
 
         }
 
+       
         
 
-        internal void EditShareSkill()
-        {
-            
-        }
+       
     }
 }

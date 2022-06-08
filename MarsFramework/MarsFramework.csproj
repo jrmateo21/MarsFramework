@@ -125,8 +125,6 @@
     <Compile Include="Pages\SignIn.cs" />
     <Compile Include="Pages\SignUp.cs" />
     <Compile Include="Pages\Profile.cs" />
-    <Compile Include="Test\ManageListingsTest.cs" />
-    <Compile Include="Test\ShareSkillTest.cs" />
     <Compile Include="Test\WebAppTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

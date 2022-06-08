@@ -133,7 +133,7 @@ namespace MarsFramework.Config {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to C:\Users\JR.Mateo\MVP\marsframework-master\marsframework-master\MarsFramework\ExcelData\TestDataManageListing.xlsx.
+        ///   Looks up a localized string similar to C:\Users\JR.Mateo\MVP\marsframework-master\marsframework-master\MarsFramework\ExcelData\TestDataManageListings.xlsx.
         /// </summary>
         internal static string TestDataManageListingsExcelPath {
             get {
