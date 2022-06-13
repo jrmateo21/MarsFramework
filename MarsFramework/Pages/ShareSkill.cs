@@ -22,9 +22,18 @@ namespace MarsFramework.Pages
         [FindsBy(How = How.Name, Using = "title")]
         private IWebElement Title { get; set; }
 
+        //Edit the Title in textbox
+        [FindsBy(How = How.Name, Using = "title")]
+        private IWebElement editTitle { get; set; }
+
+
         //Enter the Description in textbox
         [FindsBy(How = How.Name, Using = "description")]
         private IWebElement Description { get; set; }
+
+        [FindsBy(How = How.Name, Using = "description")]
+        private IWebElement editDescription { get; set; }
+
 
         //Click on Category Dropdown
         [FindsBy(How = How.Name, Using = "categoryId")]
@@ -37,6 +46,12 @@ namespace MarsFramework.Pages
         //Enter Tag names in textbox
         [FindsBy(How = How.XPath, Using = "//body/div/div/div[@id='service-listing-section']/div[contains(@class,'ui container')]/div[contains(@class,'listing')]/form[contains(@class,'ui form')]/div[contains(@class,'tooltip-target ui grid')]/div[contains(@class,'twelve wide column')]/div[contains(@class,'')]/div[contains(@class,'ReactTags__tags')]/div[contains(@class,'ReactTags__selected')]/div[contains(@class,'ReactTags__tagInput')]/input[1]")]
         private IWebElement Tags { get; set; }
+
+        [FindsBy(How = How.XPath, Using = "//*[@class='ui form']/div[4]/div[2]//div/span[1]/a")]
+        private IWebElement ClearTags { get; set; }
+
+
+
 
         //Select the Service type
         [FindsBy(How = How.XPath, Using = "//form/div[5]/div[@class='twelve wide column']/div/div[@class='field']")]
@@ -158,9 +173,15 @@ namespace MarsFramework.Pages
         [FindsBy(How = How.XPath, Using = "//div[@class='form-wrapper']//input[@placeholder='Add new tag']")]
         private IWebElement SkillExchange { get; set; }
 
+        [FindsBy(How = How.XPath, Using = "//*[@class='ui form']/div[8]/div[4]//div/span[1]/a")]
+        private IWebElement ClearSkillExchange { get; set; }
+
+
+
         //Click on Skill Trade option - Credit
         [FindsBy(How = How.XPath, Using = "//input[@name='skillTrades'][@value='false']")]
         private IWebElement SkillTradeOptionCred { get; set; }
+
 
         //Enter the amount for Credit
         [FindsBy(How = How.XPath, Using = "//input[@placeholder='Amount']")]
@@ -169,8 +190,9 @@ namespace MarsFramework.Pages
         // Click Work Samples
         [FindsBy(How = How.XPath, Using = "//*[@class='huge plus circle icon padding-25']")]
         private IWebElement UploadSamplesButton { get; set; }
-
-
+        
+        [FindsBy(How = How.XPath, Using = "//*[@class='remove sign icon floatRight'][@value=0]")]
+        private IWebElement ClearUploadSamplesButton { get; set; }
 
 
         //Click on Active/Hidden option
@@ -308,11 +330,22 @@ namespace MarsFramework.Pages
             }
 
             //Work Samples    
+                //Option 1   - Working as well
+            //Thread.Sleep(1000);
+            //IWebElement uploadFile = GlobalDefinitions.driver.FindElement(By.XPath("//*[@id='selectFile'][@type='file']"));
+           // uploadFile.SendKeys(Base.FileUploadPath);
+           // Console.WriteLine("File to Upload: " + Base.FileUploadPath);
+
+                //Option 2 using AutoIT
+            Thread.Sleep(3000);
+            UploadSamplesButton.Click();
+            AutoIt.AutoItX.WinActivate("Open");
             Thread.Sleep(1000);
-            IWebElement uploadFile = GlobalDefinitions.driver.FindElement(By.XPath("//*[@id='selectFile'][@type='file']"));
-            uploadFile.SendKeys(Base.FileUploadPath);
-            Console.WriteLine("File to Upload: " + Base.FileUploadPath);
-              
+            AutoIt.AutoItX.Send(Base.FileUploadPath);
+            Thread.Sleep(1000);
+            AutoIt.AutoItX.Send("{ENTER}");
+
+
 
 
             //Active
@@ -341,9 +374,198 @@ namespace MarsFramework.Pages
 
         }
 
-       
+        internal void EditShareSkill()
+        {
+           // ManageListings manageListingsPageObj= new ManageListings();
+            //manageListingsPageObj.EditIconListings();
+            
+            Thread.Sleep(1000);
+            editTitle.Clear();
+
+            //Populating the excel data
+            Thread.Sleep(2000);
+            GlobalDefinitions.ExcelLib.PopulateInCollection(Base.TestDataManageListingsExcelPath, "EditShareSkill");
+            editTitle.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Title"));
+
+
+
+            //Read and Enter the  new value from excel to Description Textbox
+            editDescription.Clear();
+            Description.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Description"));
+            string descriptionAdded = GlobalDefinitions.ExcelLib.ReadData(2, "Description");
+            Console.WriteLine("Description: " + descriptionAdded);
+
+            //Category Dropdown
+            CategoryDropDown.Click();
+            SelectElement categorySelect = new SelectElement(CategoryDropDown);
+            categorySelect.SelectByText(GlobalDefinitions.ExcelLib.ReadData(2, "Category"));
+            string categorySelected = GlobalDefinitions.ExcelLib.ReadData(2, "Category");
+            Console.WriteLine("Category: " + categorySelected);
+
+            //Sub-Category Dropdown
+            SubCategoryDropDown.Click();
+            SelectElement subCategorySelect = new SelectElement(SubCategoryDropDown);
+            subCategorySelect.SelectByText(GlobalDefinitions.ExcelLib.ReadData(2, "SubCategory"));
+            string subCategorySelected = GlobalDefinitions.ExcelLib.ReadData(2, "SubCategory");
+            Console.WriteLine("Sub Category: " + subCategorySelected);
+
+
+
+            //Tags
+            ClearTags.Click();
+            Tags.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Tags"));
+            Tags.SendKeys(Keys.Enter);
+            string tagsAdded = GlobalDefinitions.ExcelLib.ReadData(2, "Tags");
+            Console.WriteLine("Tags: " + tagsAdded);
+
+
+            //Service type                        
+            string svcTypeOption = GlobalDefinitions.ExcelLib.ReadData(2, "ServiceType");
+            //Console.WriteLine(svcTypeOption);
+
+            if (svcTypeOption == "One-off service")
+            {
+                OneOffServiceTypeOptions.Click();
+                Console.WriteLine("Service Type: One-off service Selected");
+            }
+            else
+            {
+                Console.WriteLine("Service Type: Hourly Basis Service Selected");
+            }
+
+            string locationTypeOption = GlobalDefinitions.ExcelLib.ReadData(2, "LocationType");
+            //Console.WriteLine(locationTypeOption);
+
+            if (locationTypeOption == "On-site")
+            {
+                OnSiteLocationTypeOption.Click();
+                Console.WriteLine("Location Type: On-site service");
+
+            }
+            else
+            {
+                Console.WriteLine("Location Type: Online service");
+
+            }
+
+            //Select Start Date
+            StartDateDropDown.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Startdate"));
+            Console.WriteLine("Start Date: " + (GlobalDefinitions.ExcelLib.ReadData(2, "Startdate")));
+
+            //Select End Date
+            EndDateDropDown.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Enddate"));
+            Console.WriteLine("End Date: " + (GlobalDefinitions.ExcelLib.ReadData(2, "Enddate")));
+
+
+            //Select Day and Time
+            string selectDay = GlobalDefinitions.ExcelLib.ReadData(2, "Selectday");
+
+            if (selectDay == "Mon")
+            {
+                MonDay.Click();
+                Thread.Sleep(1000);
+                MonDay.Click();
+                Console.WriteLine("Selected Day: Monday");
+
+                StartTimeMon.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Starttime"));
+                string startTime = GlobalDefinitions.ExcelLib.ReadData(2, "Starttime");
+                Console.WriteLine("Start Time: " + startTime);
+
+                EndTimeMon.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Endtime"));
+                string endTime = GlobalDefinitions.ExcelLib.ReadData(2, "Endtime");
+                Console.WriteLine("End Time: " + endTime);
+
+
+
+            }
+
+            else if (selectDay == "Tue")
+            {
+                TuesDay.Click();
+                Thread.Sleep(1000);
+                TuesDay.Click();
+                Console.WriteLine("Selected Day: Tuesday");
+            }
+
+
+            //Skill Trade and Skill Trade Text box(Skill-Exchange: Tag or  Credit: per hour)
+            string skillTradeOption = GlobalDefinitions.ExcelLib.ReadData(2, "SkillTrade");
+
+            if (skillTradeOption == "Credit")
+            {
+                
+                SkillTradeOptionCred.Click();
+                CreditAmount.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Credit"));
+                Console.WriteLine("Skill Trade: " + skillTradeOption);
+            }
+            else
+            {                
+                SkillTradeOptionSE.Click();
+                ClearSkillExchange.Click();
+                Thread.Sleep(1000);
+                SkillExchange.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Skill-Exchange"));
+                SkillExchange.SendKeys(Keys.Enter);
+                Console.WriteLine("Skill Trade: " + skillTradeOption);
+            }
+
+            //Work Samples    
+            //Option 1   - Working as well
+            //Thread.Sleep(1000);
+            //IWebElement uploadFile = GlobalDefinitions.driver.FindElement(By.XPath("//*[@id='selectFile'][@type='file']"));
+            // uploadFile.SendKeys(Base.FileUploadPath);
+            // Console.WriteLine("File to Upload: " + Base.FileUploadPath);
+
+            //Option 2 using AutoIT
+            ClearUploadSamplesButton.Click();
+            Thread.Sleep(3000);            
+            UploadSamplesButton.Click();
+            AutoIt.AutoItX.WinActivate("Open");
+            Thread.Sleep(1000);
+            AutoIt.AutoItX.Send(Base.FileUploadPath);
+            Thread.Sleep(1000);
+            AutoIt.AutoItX.Send("{ENTER}");
+
+
+
+
+            //Active
+            string activeOption = GlobalDefinitions.ExcelLib.ReadData(2, "Active");
+
+            if (activeOption == "Hidden")
+            {
+                HiddenOption.Click();
+                Console.WriteLine("Active Status: " + activeOption);
+
+
+
+
+            }
+
+            else
+            {
+                Console.WriteLine("Active Status: Active");
+
+            }
+
+            Save.Click();
+            Console.WriteLine("New Skills has been Created");
+
+
+        }
+
+
+
+
+
+
         
 
-       
+
+
     }
+
+
+
+
 }
+

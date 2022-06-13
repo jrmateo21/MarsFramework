@@ -80,6 +80,9 @@ namespace MarsFramework.Pages
         [FindsBy(How = How.XPath, Using = "//input[@value='Save']")]
         private IWebElement Save { get; set; }
 
+        [FindsBy(How = How.XPath, Using = "//div[@class='ns-box ns-growl ns-effect-jelly ns-type-success ns-show']")]
+        private IWebElement PopUpMsg { get; set; }
+
         internal void Listings()
         {
             //Populate the Excel Sheet
@@ -108,16 +111,12 @@ namespace MarsFramework.Pages
         {
             EditIconListings();
             Thread.Sleep(1000);
-            editTitle.Clear();
-           
-            //Populating the excel data
-            Thread.Sleep(2000);
-            GlobalDefinitions.ExcelLib.PopulateInCollection(Base.TestDataManageListingsExcelPath, "EditShareSkill");            
-            editTitle.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Title"));           
 
-            editDescription.Clear();
-            editDescription.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Description"));           
-            Save.Click();
+            ShareSkill shareSkillPageObj = new ShareSkill();
+            shareSkillPageObj.EditShareSkill();
+
+
+
         }
 
 
@@ -151,6 +150,12 @@ namespace MarsFramework.Pages
         {
             Thread.Sleep(2000);
             return updatedLastTitleListing.Text;
+        }
+
+        public string GetPopUpMsg()
+        {
+            Thread.Sleep(1000);
+            return PopUpMsg.Text;
         }
     }
 }
